@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub – Lancement imminent...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --violet: #a855f7;
+      --vert: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #1e1b4b 0, #020617 55%, #000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .wrapper {
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      padding: 32px 28px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -120px;
+      background:
+        radial-gradient(circle at 0 0, rgba(168, 85, 247, 0.25), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.15), transparent 50%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* TITRE ANIMÉ (TAPE À LA MACHINE) */
+    .title {
+      font-size: 1.9rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--violet), var(--vert));
+      -webkit-background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(229, 231, 235, 0.7);
+      width: 0;
+      animation:
+        typing 2.2s steps(30, end) forwards,
+        caret 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes caret {
+      50% { border-color: transparent; }
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #d1d5db;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.6s ease-out 2.3s forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* LIGNE "ÉTAT" AVEC POINTS QUI BOUGENT */
+    .status-line {
+      font-size: 0.95rem;
+      color: #a5b4fc;
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.6s ease-out 2.7s forwards;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--violet);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.15s; }
+    .dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateY(0); opacity: 0.3; }
+      50% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    /* TERMINAL */
+    .terminal {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.6s ease-out 3s forwards;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .term-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #f97373;
+    }
+    .term-dot:nth-child(2) { background: #facc15; }
+    .term-dot:nth-child(3) { background: #4ade80; }
+
+    .terminal-body p {
+      margin: 2px 0;
+    }
+
+    .terminal-body p span.prompt {
+      color: #22c55e;
+    }
+
+    .terminal-body p.hidden-line {
+      opacity: 0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      background: #e5e7eb;
+      margin-left: 2px;
+      animation: cursorBlink 0.9s steps(2, start) infinite;
+      vertical-align: -2px;
+    }
+
+    @keyframes cursorBlink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+
+    /* LOADER CERCLE */
+    .loader-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.6s ease-out 3.4s forwards;
+    }
+
+    .loader {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 3px solid rgba(156, 163, 175, 0.3);
+      border-top-color: var(--violet);
+      border-right-color: var(--vert);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    /* TEXTE FINAL (INTRIGUE) */
+    .teasing {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.6s ease-out 3.8s forwards;
+    }
+
+    .teasing strong {
+      color: #a5b4fc;
+    }
+
+    /* BOUTON RETOUR */
+    .back-btn {
+      margin-top: 1.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--violet), var(--vert));
+      color: #f9fafb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.6s ease-out 4.1s forwards;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+      opacity: 0.95;
+    }
+
+    .back-btn span.icon {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 24px 18px;
+      }
+      .title {
+        font-size: 1.5rem;
+      }
+      .subtitle {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <h1 class="title">Lancement du GitHub en préparation...</h1>
+
+        <p class="subtitle">
+          Les dépôts se construisent, les commits s’empilent, et quelque chose de <strong>gros</strong> se prépare.
+        </p>
+
+        <div class="status-line">
+          <span>État :</span>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <span>En approche…</span>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-header">
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+          </div>
+          <div class="terminal-body" id="terminalBody">
+            <p><span class="prompt">&gt;</span> Initialisation du profil GitHub<span class="cursor"></span></p>
+            <p class="hidden-line"><span class="prompt">&gt;</span> Connexion aux dépôts…</p>
+            <p class="hidden-line"><span class="prompt">&gt;</span> Vérification des projets BTS SIO · SLAM…</p>
+            <p class="hidden-line"><span class="prompt">&gt;</span> Mise en forme du code pour la mise en ligne…</p>
+            <p class="hidden-line"><span class="prompt">&gt;</span> Préparation de l’ouverture publique…</p>
+          </div>
+        </div>
+
+        <div class="loader-wrap">
+          <div class="loader"></div>
+          <div class="loader-text">
+            Patience… le dépôt se charge. <br> Reviens bientôt pour voir le résultat final.
+          </div>
+        </div>
+
+        <p class="teasing">
+          Tu es <strong>en avance</strong> sur tout le monde.<br>
+          Quand ce GitHub sera en ligne, tu pourras explorer mes projets, mon code, et l’évolution de mon niveau en
+          BTS SIO SLAM. Reste à l’affût. 👀
+        </p>
+
+        <div style="text-align:center;">
+          <a href="index.html" class="back-btn">
+            <span class="icon">⟵</span>
+            Retour au portfolio
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Apparition progressive des lignes du "terminal" pour renforcer le suspens
+    const lines = document.querySelectorAll(".terminal-body p.hidden-line");
+    let delay = 2600; // en ms, après le début des anims principales
+
+    lines.forEach((line, index) => {
+      setTimeout(() => {
+        line.style.transition = "opacity 0.5s ease";
+        line.style.opacity = "1";
+      }, delay + index * 900);
+    });
+  </script>
+</body>
+</html>

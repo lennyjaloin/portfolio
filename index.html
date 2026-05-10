@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portfolio - Étudiant BTS SIO SLAM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* ====== RESET SIMPLE ====== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050816;
+      color: #e5e7eb;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ====== LAYOUT GLOBAL ====== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(5, 8, 22, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #a855f7;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      position: relative;
+      padding-bottom: 0.2rem;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #a855f7, #22c55e);
+      transition: width 0.25s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.5rem 1.1rem;
+      font-size: 0.9rem;
+      background: radial-gradient(circle at 0 0, rgba(168, 85, 247, 0.35), transparent 55%),
+                  radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.25), transparent 55%);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 15px 40px rgba(15, 23, 42, 0.6);
+      border-color: #a855f7;
+    }
+
+    /* Animation du bouton pendant le téléchargement */
+    .btn.loading {
+      opacity: 0.9;
+      pointer-events: none; /* évite les double-clics */
+    }
+
+    .btn.loading::after {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-left: 8px;
+      border-radius: 999px;
+      border: 2px solid rgba(248, 250, 252, 0.5);
+      border-top-color: #ffffff;
+      animation: spin 0.7s linear infinite;
+      vertical-align: -2px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem 4rem; /* 6rem pour compenser le header fixe */
+    }
+
+    section {
+      padding: 4rem 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #9ca3af;
+      margin-bottom: 0.25rem;
+    }
+
+    .muted {
+      color: #9ca3af;
+      font-size: 0.95rem;
+    }
+
+    /* ====== HERO ====== */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 3rem;
+      align-items: center;
+      min-height: calc(100vh - 6rem);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(90deg, #a855f7, #22c55e);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: #d1d5db;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .badge {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.2rem 0.7rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .hero-secondary {
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    .hero-card {
+      border-radius: 1.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 1.5rem;
+      background: radial-gradient(circle at 0 0, rgba(55, 65, 81, 0.4), transparent 55%),
+                  rgba(15, 23, 42, 0.9);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+    }
+
+    .hero-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-card p {
+      font-size: 0.9rem;
+      color: #d1d5db;
+      margin-bottom: 1rem;
+    }
+
+    .hero-meta {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* ====== A PROPOS ====== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    .about-box {
+      border-radius: 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .about-box h3 {
+      font-size: 1rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .about-list {
+      list-style: none;
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    .about-list li + li {
+      margin-top: 0.3rem;
+    }
+
+    /* ====== COMPÉTENCES ====== */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .chip {
+      border-radius: 0.75rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.85rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .skill-card {
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.9rem;
+    }
+
+    .skill-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .progress {
+      position: relative;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 1);
+      overflow: hidden;
+      margin-top: 0.35rem;
+    }
+
+    .progress-bar {
+      position: absolute;
+      inset: 0;
+      transform-origin: left;
+      background: linear-gradient(90deg, #a855f7, #22c55e);
+    }
+
+    .skill-level {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+    }
+
+    /* ====== PROJETS ====== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      border-radius: 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.95);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      cursor: default;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.85);
+      border-color: #a855f7;
+    }
+
+    .project-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .project-meta {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.3rem;
+    }
+
+    .project-tag {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      background: rgba(31, 41, 55, 1);
+      color: #d1d5db;
+    }
+
+    /* ====== PARCOURS ====== */
+    .timeline {
+      position: relative;
+      padding-left: 1.2rem;
+      border-left: 1px solid rgba(148, 163, 184, 0.5);
+      margin-top: 1rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -1.05rem;
+      top: 0.15rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid #a855f7;
+      background: #050816;
+    }
+
+    .timeline-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .timeline-period {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    /* ====== CONTACT ====== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: #d1d5db;
+      margin-bottom: 0.15rem;
+      display: inline-block;
+    }
+
+    input, textarea {
+      width: 100%;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.6rem 0.75rem;
+      color: #e5e7eb;
+      font: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      resize: vertical;
+      min-height: 40px;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.5);
+    }
+
+    textarea {
+      min-height: 120px;
+    }
+
+    .contact-info {
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    .contact-info p + p {
+      margin-top: 0.35rem;
+    }
+
+    .contact-links {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .contact-links a {
+      color: #a855f7;
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
+      opacity: 0.95;
+    }
+
+    /* ====== FOOTER ====== */
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 1.5rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* ====== BOUTON BACK-TO-TOP ====== */
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(15, 23, 42, 0.8);
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none; /* maquette simple, pas de menu burger pour l'instant */
+      }
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      main {
+        padding-top: 5.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ====== HEADER / NAVBAR ====== -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">PORTFOLIO BTS SIO SLAM</div>
+      <nav>
+        <ul>
+          <li><a href="#accueil">Accueil</a></li>
+          <li><a href="#a-propos">À propos</a></li>
+          <li><a href="#competences">Compétences</a></li>
+          <li><a href="#projets">Projets</a></li>
+          <li><a href="#parcours">Parcours</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
+        Me contacter
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ====== HERO / ACCUEIL ====== -->
+    <section id="accueil" class="hero">
+      <div>
+        <p class="section-subtitle">Portfolio</p>
+        <h1 class="hero-title">
+          Bonjour, moi c'est <span class="highlight">Lenny!</span> 👋
+        </h1>
+        <p class="hero-sub">
+          Étudiant en <strong>2ᵉ année de BTS SIO option SLAM</strong>, passionné par le
+          développement d'applications web et la conception de solutions sur mesure pour les entreprises.
+        </p>
+
+        <div class="hero-badges">
+          <span class="badge">BTS SIO – SLAM</span>
+          <span class="badge">Développement Web</span>
+          <span class="badge">Java · PHP · SQL · CSS · HTML</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="cv.pdf" download="CV_Lenny_Jaloin.pdf" class="btn" id="cvBtn">
+            Télécharger mon CV
+          </a>
+          <span class="hero-secondary">
+            En alternance à la Bibliothèque François Mitterrand.
+          </span>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <h3>Profil rapide</h3>
+        <p>
+          Je conçois et développe des applications web en mettant l'accent sur la
+          <strong>qualité du code</strong>, la <strong>performance</strong> et l'<strong>expérience utilisateur</strong>.
+        </p>
+        <div class="hero-meta">
+          📍 Basé à : Evry Courcouronnes<br />
+          🎓 Formation : BTS SIO – SLAM<br />
+          💼 Objectif : poste de développeur
+        </div>
+      </aside>
+    </section>
+
+    <!-- ====== A PROPOS ====== -->
+    <section id="a-propos">
+      <p class="section-subtitle">Qui suis-je ?</p>
+      <h2 class="section-title">À propos de moi</h2>
+      <p class="muted">
+        Quelques informations sur mon parcours, ma façon de travailler et ce que je peux apporter à une équipe.
+      </p>
+
+      <div class="about-grid" style="margin-top: 1.8rem;">
+        <div class="about-box">
+          <h3>Mon profil</h3>
+          <p class="muted">
+            Actuellement en <strong>deuxième année de BTS SIO option SLAM</strong>, je me forme au développement
+            d'applications web et logicielles. J'aime particulièrement :
+          </p>
+          <ul class="about-list" style="margin-top: 0.6rem;">
+            <li>• Créer des interfaces claires et efficaces</li>
+            <li>• Concevoir des bases de données bien structurées</li>
+            <li>• Travailler en équipe sur des projets concrets</li>
+            <li>• Apprendre de nouvelles technologies pour améliorer mes compétences</li>
+          </ul>
+        </div>
+
+        <div class="about-box">
+          <h3>Ce que je recherche (pour plus tard)</h3>
+          <p class="muted">
+            Je suis à la recherche d'une <strong>alternance</strong> ou d'un <strong>stage</strong> en
+            développement (web, logiciel, ou fullstack) pour mettre en pratique mes compétences dans un
+            environnement professionnel.
+          </p>
+          <ul class="about-list" style="margin-top: 0.6rem;">
+            <li>• Durée : [ex : 12 mois d'alternance, 6 semaines de stage...]</li>
+            <li>• Rythme : [ex : 3 jours entreprise / 2 jours école]</li>
+            <li>• Localisation : Île de France / Ballancourt</li>
+            <li>• Types de projets : applications web, outils internes, APIs, etc.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== COMPÉTENCES ====== -->
+    <section id="competences">
+      <p class="section-subtitle">Ce que je maîtrise</p>
+      <h2 class="section-title">Compétences techniques</h2>
+      <p class="muted">
+        Voici un aperçu de mes principaux langages, frameworks et outils utilisés durant mon BTS SIO option SLAM
+        et mes projets personnels.
+      </p>
+
+      <div class="chips" style="margin-top: 1.2rem;">
+        <span class="chip">Java</span>
+        <span class="chip">PHP</span>
+        <span class="chip">HTML / CSS</span>
+        <span class="chip">JavaScript</span>
+        <span class="chip">SQL · MySQL</span>
+        <span class="chip">POO</span>
+        <span class="chip">Git / GitHub</span>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h4>Développement Web</h4>
+          <p>Création de sites et petites applications web en HTML, CSS, JS et PHP.</p>
+          <div class="progress">
+            <div class="progress-bar" style="width: 45%;"></div>
+          </div>
+          <p class="skill-level">Niveau : Intermédiaire</p>
+        </div>
+
+        <div class="skill-card">
+          <h4>Bases de données & SQL</h4>
+          <p>Conception de schémas, écriture de requêtes SQL, jointures, normalisation.</p>
+          <div class="progress">
+            <div class="progress-bar" style="width: 25%;"></div>
+          </div>
+          <p class="skill-level">Niveau : Débutant</p>
+        </div>
+
+        <div class="skill-card">
+          <h4>Outils & Méthodologie</h4>
+          <p>Git / GitHub, documentation, mini-cahiers des charges, travail en mode projet.</p>
+          <div class="progress">
+            <div class="progress-bar" style="width: 10%;"></div>
+          </div>
+          <p class="skill-level">Niveau : Démarrage</p>
+        </div>
+    </section>
+
+    <!-- ====== PROJETS ====== -->
+    <section id="projets">
+      <p class="section-subtitle">Réalisations</p>
+      <h2 class="section-title">Projets de BTS & personnels</h2>
+      <p class="muted">
+        Quelques exemples de projets sur lesquels j'ai travaillé durant ma formation et pendant mon BAC.
+        N'hésite pas à me demander plus de détails.
+      </p>
+
+      <div class="projects-grid" style="margin-top: 1.6rem;">
+        <article class="project-card">
+          <h3 class="project-title">Site Événementiel</h3>
+          <p class="project-meta">Projet BTS · PHP · MySQL · CSS · JavaScript</p>
+          <p>
+            Site Web d'événementiel permettant de créer ou rejoindre des événements aux alentours.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">JS</span>
+            <span class="project-tag">MySQL</span>
+            <span class="project-tag">HTML / CSS</span>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3 class="project-title">Odomètre connecté</h3>
+          <p class="project-meta">Projet scolaire · C++ · MIT App Inventor</p>
+          <p>
+            Odomètre connecté affichant le chemin parcouru, la distance, avec bombonne de peinture contrôlée
+            via application pour tracer des lignes de terrain par exemple.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">C++</span>
+            <span class="project-tag">App mobile</span>
+            <span class="project-tag">Projet STI2D</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====== PARCOURS ====== -->
+    <section id="parcours">
+      <p class="section-subtitle">Mon chemin</p>
+      <h2 class="section-title">Parcours & expériences</h2>
+      <p class="muted">
+        Un résumé de mon cursus et de mes premières expériences en entreprise.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-period">2025 – 2026</div>
+          <div class="timeline-title">2ᵉ année BTS SIO – Option SLAM</div>
+          <p class="timeline-desc">
+            Approfondissement du développement d'applications/web, gestion de projet, sécurité, architecture,
+            réalisation de projets complets en équipe.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-period">2024 – 2025</div>
+          <div class="timeline-title">1ʳᵉ année BTS SIO – Option SLAM</div>
+          <p class="timeline-desc">
+            Bases du développement (Java, PHP, web), réseaux, SI, bases de données, découverte de la démarche
+            de projet et de la documentation technique.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-period">2022 - 2024</div>
+          <div class="timeline-title">BAC STI2D - Lycée Edmond Michelet, Arpajon</div>
+          <p class="timeline-desc">
+            Apprentissage des bases du langage C, premier projet (odomètre connecté), création de petites apps
+            téléphone/tablette.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== CONTACT ====== -->
+    <section id="contact">
+      <p class="section-subtitle">Me contacter</p>
+      <h2 class="section-title">Restons en contact</h2>
+      <p class="muted">
+        Une question, une opportunité, une proposition d'alternance ? Tu peux m'écrire en utilisant mes coordonnées ci-dessous.
+      </p>
+
+      <div class="contact-grid" style="margin-top: 1.5rem;">
+        <div>
+          <form id="contactForm">
+            <div>
+              <label for="nom">Nom</label>
+              <input id="nom" name="nom" type="text" placeholder="Votre nom" required />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="votre@email.com" required />
+            </div>
+            <div>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Expliquez votre besoin, votre projet, ou votre opportunité..."></textarea>
+            </div>
+            <button type="submit" class="btn" style="margin-top: 0.5rem;" id="sendBtn">
+              Envoyer le message
+            </button>
+            <p id="formStatus" class="muted" style="margin-top: 0.6rem;"></p>
+          </form>
+        </div>
+
+        <aside class="contact-info">
+          <p><strong>Coordonnées</strong></p>
+          <p>📧 Email : <a href="mailto:lenny.jaloin@gmail.com">lenny.jaloin@gmail.com</a></p>
+          <p>📱 Téléphone : 06 69 29 65 10</p>
+          <p>📍 Localisation : Ballancourt-sur-Essonne / IDF</p>
+
+          <div class="contact-links">
+            <p><strong>Réseaux & contacts</strong></p>
+<a href="https://github.com/lennyjaloin" target="_blank" class="contact-btn">Mon GitHub</a>
+<a href="https://fr.linkedin.com/in/lenny-jaloin-61ba26327" target="_blank" class="contact-btn">Mon LinkedIn</a>
+
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Lenny Jaloin · Étudiant BTS SIO – SLAM · Portfolio.
+  </footer>
+
+  <!-- ====== BOUTON RETOUR EN HAUT ====== -->
+  <button class="back-to-top" id="backToTop" aria-label="Remonter en haut de la page">↑</button>
+
+  <script>
+    // Met à jour automatiquement l'année dans le footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Bouton retour en haut
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 400) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+    });
+
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Animation du bouton "Télécharger mon CV"
+    const cvBtn = document.getElementById("cvBtn");
+
+    if (cvBtn) {
+      cvBtn.addEventListener("click", () => {
+        cvBtn.classList.add("loading");
+        const originalText = cvBtn.textContent;
+        cvBtn.textContent = "Téléchargement...";
+
+        setTimeout(() => {
+          cvBtn.classList.remove("loading");
+          cvBtn.textContent = originalText;
+        }, 2500);
+      });
+    }
+  </script>
+
+  <!-- EmailJS (envoi réel d'emails sur GitHub Pages) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="email.js"></script>
+</body>
+</html>
