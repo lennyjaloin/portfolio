@@ -199,6 +199,59 @@
       opacity: 0;
     }
 
+    /* ====== ONGLES VEILLE ====== */
+    .veille-tabs {
+      margin: 1.5rem 0;
+    }
+
+    .tabs-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    .tab-button {
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.5);
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .tab-button:hover {
+      border-color: rgba(168, 85, 247, 0.5);
+      background: rgba(168, 85, 247, 0.1);
+    }
+
+    .tab-button.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(34, 197, 94, 0.1));
+      border-color: #a855f7;
+      color: #a855f7;
+      font-weight: 500;
+    }
+
+    .tab-button.active:hover {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(34, 197, 94, 0.2));
+    }
+
+    /* Responsive pour les onglets */
+    @media (max-width: 768px) {
+      .tabs-container {
+        gap: 0.3rem;
+      }
+
+      .tab-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+      }
+    }
+
     .animate-fade.visible {
       animation: fadeIn 0.8s ease-out forwards;
     }
@@ -704,12 +757,14 @@
         </div>
 
         <div class="hero-actions">
-          <a href="cv.pdf" download="CV_Lenny_Jaloin.pdf" class="btn" id="cvBtn">
-            Télécharger mon CV
-          </a>
-          <span class="hero-secondary">
-            En alternance à la Bibliothèque François Mitterrand.
-          </span>
+          <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+            <a href="cv.pdf" download="CV_Lenny_Jaloin.pdf" class="btn" id="cvBtn">
+              Télécharger mon CV
+            </a>
+            <a href="FicheE5.pdf" download="FicheE5.pdf" class="btn" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.6);">
+              Télécharger ma fiche synthèse (E5)
+            </a>
+          </div>
         </div>
       </div>
 
@@ -902,7 +957,18 @@
       </p>
       <p class="muted" id="lastUpdate" style="font-size: 0.85rem; margin-top: 0.5rem; color: #a855f7;"></p>
 
-      <div class="projects-grid" style="margin-top: 1.6rem;" id="veilleContainer">
+      <!-- Onglets de filtrage -->
+      <div class="veille-tabs" style="margin-top: 1.6rem; margin-bottom: 1.6rem;">
+        <div class="tabs-container">
+          <button class="tab-button active" data-category="all">Tous</button>
+          <button class="tab-button" data-category="JavaScript">JavaScript</button>
+          <button class="tab-button" data-category="Web Apps">Web Apps</button>
+          <button class="tab-button" data-category="Services">Services</button>
+          <button class="tab-button" data-category="Déploiement">Déploiement</button>
+        </div>
+      </div>
+
+      <div class="projects-grid" id="veilleContainer">
         <!-- Chargement du flux RSS -->
         <p class="muted">Chargement de la veille...</p>
       </div>
@@ -1042,6 +1108,8 @@
 
   <!-- Chargement du flux RSS Veille -->
   <script>
+    let allArticles = []; // Stocker tous les articles pour le filtrage
+
     // Charger et afficher la veille depuis le flux RSS
     async function loadVeille() {
       try {
@@ -1052,7 +1120,7 @@
 
         // Extraire les articles
         const items = xmlDoc.querySelectorAll('item');
-        const articlesData = [];
+        allArticles = []; // Réinitialiser
         let mostRecentDate = null;
 
         items.forEach(item => {
@@ -1072,7 +1140,7 @@
             }
           }
 
-          articlesData.push({
+          allArticles.push({
             title,
             link,
             description,
@@ -1083,7 +1151,7 @@
         });
 
         // Trier les articles par date décroissante (le plus récent en premier)
-        articlesData.sort((a, b) => {
+        allArticles.sort((a, b) => {
           if (!a.pubDate) return 1;
           if (!b.pubDate) return -1;
           return b.pubDate - a.pubDate;
@@ -1096,44 +1164,83 @@
             month: 'long',
             year: 'numeric'
           }).format(mostRecentDate);
-          const articleCount = articlesData.length;
+          const articleCount = allArticles.length;
           document.getElementById('lastUpdate').textContent = `✨ Veille à jour · Article le plus récent : ${formattedDate} · ${articleCount} ressources suivies`;
         }
 
-        // Afficher les articles
-        const container = document.getElementById('veilleContainer');
-        container.innerHTML = ''; // Vider le conteneur
+        // Afficher tous les articles par défaut
+        displayArticles('all');
 
-        articlesData.forEach(article => {
-          const formattedPubDate = article.pubDate
-            ? new Intl.DateTimeFormat('fr-FR', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric'
-              }).format(article.pubDate)
-            : '';
+        // Configurer les événements des onglets
+        setupTabEvents();
 
-          // Créer la carte
-          const card = document.createElement('article');
-          card.className = 'project-card animate-on-scroll';
-          card.innerHTML = `
-            <h3 class="project-title"><a href="${article.link}" target="_blank" style="color: inherit; text-decoration: none;">${article.title}</a></h3>
-            <p class="project-meta">${article.category}${formattedPubDate ? ` · ${formattedPubDate}` : ''}</p>
-            <p>${article.description}</p>
-            <div class="project-tags">
-              <span class="project-tag">Veille</span>
-              <span class="project-tag">${article.category}</span>
-            </div>
-          `;
-          container.appendChild(card);
-
-          // Réappliquer l'animation
-          observer.observe(card);
-        });
       } catch (error) {
         console.error('Erreur lors du chargement de la veille:', error);
         document.getElementById('veilleContainer').innerHTML = '<p class="muted">❌ Erreur lors du chargement de la veille.</p>';
       }
+    }
+
+    // Fonction pour afficher les articles filtrés
+    function displayArticles(category) {
+      const container = document.getElementById('veilleContainer');
+      container.innerHTML = ''; // Vider le conteneur
+
+      // Filtrer les articles selon la catégorie
+      const filteredArticles = category === 'all'
+        ? allArticles
+        : allArticles.filter(article => article.category === category);
+
+      // Afficher les articles filtrés
+      filteredArticles.forEach(article => {
+        const formattedPubDate = article.pubDate
+          ? new Intl.DateTimeFormat('fr-FR', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric'
+            }).format(article.pubDate)
+          : '';
+
+        // Créer la carte
+        const card = document.createElement('article');
+        card.className = 'project-card animate-on-scroll';
+        card.innerHTML = `
+          <h3 class="project-title"><a href="${article.link}" target="_blank" style="color: inherit; text-decoration: none;">${article.title}</a></h3>
+          <p class="project-meta">${article.category}${formattedPubDate ? ` · ${formattedPubDate}` : ''}</p>
+          <p>${article.description}</p>
+          <div class="project-tags">
+            <span class="project-tag">Veille</span>
+            <span class="project-tag">${article.category}</span>
+          </div>
+        `;
+        container.appendChild(card);
+
+        // Réappliquer l'animation
+        observer.observe(card);
+      });
+
+      // Message si aucun article dans cette catégorie
+      if (filteredArticles.length === 0) {
+        container.innerHTML = '<p class="muted">Aucun article dans cette catégorie pour le moment.</p>';
+      }
+    }
+
+    // Configurer les événements des onglets
+    function setupTabEvents() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Retirer la classe active de tous les boutons
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+
+          // Ajouter la classe active au bouton cliqué
+          button.classList.add('active');
+
+          // Afficher les articles de la catégorie sélectionnée
+          const category = button.dataset.category;
+          displayArticles(category);
+        });
+      });
     }
 
     // Charger la veille au chargement de la page
