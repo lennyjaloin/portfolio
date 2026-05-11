@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Veille Technologique - Développement Web</title>
+    <link>https://github.com/lennyjaloin</link>
+    <description>Flux de veille pour suivre les tendances du développement web, front-end et JavaScript</description>
+    <language>fr-fr</language>
+    <lastBuildDate>Sun, 11 May 2026 14:30:00 GMT</lastBuildDate>
+
+    <!-- JavaScript & APIs Modernes -->
+    <item>
+      <title>Intersection Observer API - Animations Performance</title>
+      <link>https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API</link>
+      <description>The Intersection Observer API lets code register a callback function that is executed whenever a particular element enters or exits an intersection with another element or the viewport, or when the intersection between two elements changes by a specified amount. This way, sites no longer need to do anything on the main thread to watch for element intersection.</description>
+      <category>JavaScript</category>
+      <pubDate>Fri, 01 May 2026 10:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Web Components - Composants Réutilisables</title>
+      <link>https://developer.mozilla.org/en-US/docs/Web/API/Web_components</link>
+      <description>Web Components aims to solve reusability problems — it consists of three main technologies (custom elements, shadow DOM, and HTML templates), which can be used together to create versatile custom elements with encapsulated functionality that can be reused wherever you like without fear of code collisions.</description>
+      <category>JavaScript</category>
+      <pubDate>Thu, 25 Apr 2026 14:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>TypeScript - Typage Statique en JavaScript</title>
+      <link>https://www.typescriptlang.org/</link>
+      <description>TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. It adds additional syntax to support a tighter integration with your editor and catches errors early. TypeScript code converts to JavaScript, which runs anywhere JavaScript runs: in a browser, on Node.js, Deno, and in your apps.</description>
+      <category>JavaScript</category>
+      <pubDate>Wed, 20 Apr 2026 09:15:00 GMT</pubDate>
+    </item>
+
+    <!-- Front-End & Design -->
+    <item>
+      <title>CSS Grid & Flexbox - Layouts Modernes</title>
+      <link>https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout</link>
+      <description>The CSS grid layout module excels at dividing a page into major regions or defining the relationship in terms of size, position, and layering between parts of a control built from HTML primitives. Like tables, grid layout enables an author to align elements into columns and rows, but many more layouts are either possible or easier with CSS grid.</description>
+      <category>CSS</category>
+      <pubDate>Mon, 15 Apr 2026 11:45:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Lighthouse - Optimiser les Performances Web</title>
+      <link>https://developer.chrome.com/docs/lighthouse/overview/</link>
+      <description>Lighthouse is an open-source tool for improving the quality of your web applications. It audits performance, accessibility, progressive web apps, SEO, and other best practices. You can run it against any web page, public or requiring authentication. It has both CLI and DevTools integrations.</description>
+      <category>Performance</category>
+      <pubDate>Sat, 10 Apr 2026 16:20:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Progressive Web Apps (PWA)</title>
+      <link>https://web.dev/progressive-web-apps/</link>
+      <description>Progressive Web Apps are web applications that take advantage of modern web technologies to deliver app-like experiences to users. PWAs work on any browser, but work best on modern browsers with service workers, web app manifests, and push notifications enabled. They can work offline and install on the home screen.</description>
+      <category>Web Apps</category>
+      <pubDate>Thu, 08 Apr 2026 13:00:00 GMT</pubDate>
+    </item>
+
+    <!-- Frameworks & Outils -->
+    <item>
+      <title>React 19 - La Librairie JavaScript pour les UI</title>
+      <link>https://react.dev/</link>
+      <description>React lets you build user interfaces out of individual pieces called components. Create your own React components like Thumbnail, LikeButton, and Video. Then combine them into entire screens, pages, and apps. React components are JavaScript functions that receive data and return what should appear on the screen.</description>
+      <category>Frameworks</category>
+      <pubDate>Wed, 07 Apr 2026 08:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Vue 3 - Framework Progressif</title>
+      <link>https://vuejs.org/</link>
+      <description>Vue is an approachable, performant and versatile framework for building web user interfaces. It builds on top of standard HTML, CSS and JavaScript with an intuitive API and world-class documentation. Vue is truly reactive with a compiler-optimized rendering system that rarely requires manual optimization.</description>
+      <category>Frameworks</category>
+      <pubDate>Tue, 06 Apr 2026 10:15:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Svelte - Compilateur JavaScript</title>
+      <link>https://svelte.dev/</link>
+      <description>Svelte is a UI framework that uses a compiler to let you write breathtakingly concise components that do minimal work in the browser, using languages you already know — HTML, CSS and JavaScript. Developers consistently rank Svelte as the framework they're most excited about using.</description>
+      <category>Frameworks</category>
+      <pubDate>Mon, 05 Apr 2026 14:45:00 GMT</pubDate>
+    </item>
+
+    <!-- Services & Déploiement -->
+    <item>
+      <title>EmailJS - Envoi d'Emails depuis le Front-End</title>
+      <link>https://www.emailjs.com/</link>
+      <description>Send email directly from your code with no server needed. EmailJS keeps your authentication details on the server-side, and the client-side code just triggers a predefined email template. Focus on things that matter. Over 25,000 developers around the world trust EmailJS to send emails.</description>
+      <category>Services</category>
+      <pubDate>Sun, 04 Apr 2026 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>GitHub Pages - Hébergement Statique Gratuit</title>
+      <link>https://pages.github.com/</link>
+      <description>Websites for you and your projects. Hosted directly from your GitHub repository. Just edit, push, and your changes are live. You get one site per GitHub account and organization, and unlimited project sites. No database or complex server setup required.</description>
+      <category>Déploiement</category>
+      <pubDate>Sat, 03 Apr 2026 09:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Vercel - Plateforme de Déploiement</title>
+      <link>https://vercel.com/</link>
+      <description>Vercel provides the developer tools and cloud infrastructure to build, scale, and secure a faster, more personalized web. Deploy your app in seconds with automatic git integration, global edge network, and serverless functions. Vercel deeply understands your app to provision the right resources and optimize for high-performance applications.</description>
+      <category>Déploiement</category>
+      <pubDate>Fri, 02 Apr 2026 15:20:00 GMT</pubDate>
+    </item>
+
+    <!-- Ressources d'Apprentissage -->
+    <item>
+      <title>MDN Web Docs - Documentation Officielle</title>
+      <link>https://developer.mozilla.org/</link>
+      <description>The Mozilla Developer Network (MDN) provides information about Open Web technologies. Learn about HTML, CSS, JavaScript, and Web APIs. MDN is the best source of documentation for web standards and modern browser features.</description>
+      <category>Ressources</category>
+      <pubDate>Tue, 30 Mar 2026 10:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Dev.to - Communauté de Développeurs</title>
+      <link>https://dev.to/</link>
+      <description>DEV Community is a community of software developers getting together to help one another out. The community can share articles, discussions, and latest trends in web development. A platform where developers share knowledge and experiences.</description>
+      <category>Ressources</category>
+      <pubDate>Mon, 29 Mar 2026 08:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Can I Use - Compatibilité Navigateurs</title>
+      <link>https://caniuse.com/</link>
+      <description>Caniuse provides up-to-date browser support tables for support of front-end web technologies on desktop and mobile web browsers. Check the compatibility of CSS, JavaScript, and HTML features before using them in your projects.</description>
+      <category>Ressources</category>
+      <pubDate>Sun, 28 Mar 2026 16:15:00 GMT</pubDate>
+    </item>
+
+  </channel>
+</rss>
