@@ -1050,24 +1050,10 @@
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
 
-        // Extraire la date de dernière actualisation
-        const lastBuildDate = xmlDoc.querySelector('channel > lastBuildDate');
-        if (lastBuildDate) {
-          const updateDate = new Date(lastBuildDate.textContent);
-          const formattedDate = new Intl.DateTimeFormat('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          }).format(updateDate);
-          document.getElementById('lastUpdate').textContent = `✨ Dernière mise à jour : ${formattedDate}`;
-        }
-
         // Extraire les articles
         const items = xmlDoc.querySelectorAll('item');
-        const container = document.getElementById('veilleContainer');
-        container.innerHTML = ''; // Vider le conteneur
+        const articlesData = [];
+        let mostRecentDate = null;
 
         items.forEach(item => {
           const title = item.querySelector('title')?.textContent || '';
@@ -1076,27 +1062,67 @@
           const category = item.querySelector('category')?.textContent || '';
           const pubDate = item.querySelector('pubDate')?.textContent || '';
 
-          // Formater la date
-          let formattedPubDate = '';
+          // Parser la date de publication
+          let itemDate = null;
           if (pubDate) {
-            const itemDate = new Date(pubDate);
-            formattedPubDate = new Intl.DateTimeFormat('fr-FR', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric'
-            }).format(itemDate);
+            itemDate = new Date(pubDate);
+            // Trouver la date la plus récente
+            if (!mostRecentDate || itemDate > mostRecentDate) {
+              mostRecentDate = itemDate;
+            }
           }
+
+          articlesData.push({
+            title,
+            link,
+            description,
+            category,
+            pubDate: itemDate,
+            pubDateFormatted: pubDate
+          });
+        });
+
+        // Trier les articles par date décroissante (le plus récent en premier)
+        articlesData.sort((a, b) => {
+          if (!a.pubDate) return 1;
+          if (!b.pubDate) return -1;
+          return b.pubDate - a.pubDate;
+        });
+
+        // Afficher la date de dernière mise à jour (la plus récente des articles)
+        if (mostRecentDate) {
+          const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          }).format(mostRecentDate);
+          const articleCount = articlesData.length;
+          document.getElementById('lastUpdate').textContent = `✨ Veille à jour · Article le plus récent : ${formattedDate} · ${articleCount} ressources suivies`;
+        }
+
+        // Afficher les articles
+        const container = document.getElementById('veilleContainer');
+        container.innerHTML = ''; // Vider le conteneur
+
+        articlesData.forEach(article => {
+          const formattedPubDate = article.pubDate
+            ? new Intl.DateTimeFormat('fr-FR', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+              }).format(article.pubDate)
+            : '';
 
           // Créer la carte
           const card = document.createElement('article');
           card.className = 'project-card animate-on-scroll';
           card.innerHTML = `
-            <h3 class="project-title"><a href="${link}" target="_blank" style="color: inherit;">${title}</a></h3>
-            <p class="project-meta">${category}${formattedPubDate ? ` · ${formattedPubDate}` : ''}</p>
-            <p>${description}</p>
+            <h3 class="project-title"><a href="${article.link}" target="_blank" style="color: inherit; text-decoration: none;">${article.title}</a></h3>
+            <p class="project-meta">${article.category}${formattedPubDate ? ` · ${formattedPubDate}` : ''}</p>
+            <p>${article.description}</p>
             <div class="project-tags">
               <span class="project-tag">Veille</span>
-              <span class="project-tag">${category}</span>
+              <span class="project-tag">${article.category}</span>
             </div>
           `;
           container.appendChild(card);
@@ -1106,7 +1132,7 @@
         });
       } catch (error) {
         console.error('Erreur lors du chargement de la veille:', error);
-        document.getElementById('veilleContainer').innerHTML = '<p class="muted">Erreur lors du chargement de la veille.</p>';
+        document.getElementById('veilleContainer').innerHTML = '<p class="muted">❌ Erreur lors du chargement de la veille.</p>';
       }
     }
 
